@@ -1,0 +1,11 @@
+apiVersion: network.azure.crossplane.io/v1alpha3
+kind: ExpressRouteCircuit
+metadata:
+  name: example-exp-route-ckt
+spec:
+  resourceGroupNameRef:
+    name: example-rg
+  expressRouteCircuitName: test-exp-route-ckt-name
+  properties:
+  providerConfigRef:
+    name: example

@@ -226,3 +226,75 @@ type SubnetList struct {
 	metav1.ListMeta `json:"metadata,omitempty"`
 	Items           []Subnet `json:"items"`
 }
+
+// A ExpressRouteCircuitSpec defines the desired state of a ExpressRouteCircuit.
+type ExpressRouteCircuitSpec struct {
+	xpv1.ResourceSpec `json:",inline"`
+
+	// VirtualNetworkName - Name of the Subnet's virtual network.
+	ExpressRouteCircuitName string `json:"expressRouteCircuitName,omitempty"`
+
+	// VirtualNetworkNameRef references to a VirtualNetwork to retrieve its name
+	// VirtualNetworkNameRef *xpv1.Reference `json:"virtualNetworkNameRef,omitempty"`
+
+	// VirtualNetworkNameSelector selects a reference to a VirtualNetwork to
+	// retrieve its name
+	// VirtualNetworkNameSelector *xpv1.Selector `json:"virtualNetworkNameSelector,omitempty"`
+
+	// ResourceGroupName - Name of the Subnet's resource group.
+	ResourceGroupName string `json:"resourceGroupName,omitempty"`
+
+	// ResourceGroupNameRef - A reference to the the Subnets's resource group.
+	ResourceGroupNameRef *xpv1.Reference `json:"resourceGroupNameRef,omitempty"`
+
+	// ResourceGroupNameSelector - Selects a reference to the the Subnets's
+	// resource group.
+	ResourceGroupNameSelector *xpv1.Selector `json:"resourceGroupNameSelector,omitempty"`
+}
+
+// A ExpressRouteCircuitStatus represents the observed state of a ExpressRouteCircuit.
+type ExpressRouteCircuitStatus struct {
+	xpv1.ResourceStatus `json:",inline"`
+
+	// State of this Subnet.
+	State string `json:"state,omitempty"`
+
+	// A Message providing detail about the state of this Subnet, if any.
+	Message string `json:"message,omitempty"`
+
+	// Etag - A unique string that changes whenever the resource is updated.
+	Etag string `json:"etag,omitempty"`
+
+	// ID of this Subnet.
+	ID string `json:"id,omitempty"`
+
+	// Purpose - A string identifying the intention of use for this subnet based
+	// on delegations and other user-defined properties.
+	Purpose string `json:"purpose,omitempty"`
+}
+
+// +kubebuilder:object:root=true
+
+// A ExpressRouteCircuit is a managed resource that represents an Azure Express Route Circuit.
+// +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
+// +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
+// +kubebuilder:printcolumn:name="STATE",type="string",JSONPath=".status.state"
+// +kubebuilder:printcolumn:name="AGE",type="date",JSONPath=".metadata.creationTimestamp"
+// +kubebuilder:subresource:status
+// +kubebuilder:resource:scope=Cluster,categories={crossplane,managed,azure}
+type ExpressRouteCircuit struct {
+	metav1.TypeMeta   `json:",inline"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
+
+	Spec   ExpressRouteCircuitSpec   `json:"spec"`
+	Status ExpressRouteCircuitStatus `json:"status,omitempty"`
+}
+
+// +kubebuilder:object:root=true
+
+// ExpressRouteCircuitList contains a list of Subnet items
+type ExpressRouteCircuitList struct {
+	metav1.TypeMeta `json:",inline"`
+	metav1.ListMeta `json:"metadata,omitempty"`
+	Items           []ExpressRouteCircuit `json:"items"`
+}
